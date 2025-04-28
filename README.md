@@ -106,12 +106,14 @@ $users = User::query()->get();
 foreach ($users as $user) {
     echo $user->getAttribute('username') . "\n";
 }
-
+######################################################################
 use Database\Models\User;
 
 // 查询单个用户 by ID
 $user = User::find(1); // 查找 ID 为 1 的用户
 echo $user->getAttribute('username');
+
+######################################################################
 
 // 查询单个用户
 $user = User::find(1);
@@ -121,6 +123,7 @@ $user->setAttribute('email', 'new.email@example.com');
 $user->setAttribute('real_name', 'John Updated');
 $user->save();
 
+######################################################################
 use Database\Models\User;
 
 // 查询单个用户
@@ -129,6 +132,8 @@ $user = User::find(1);
 // 执行软删除（将 `deleted_at` 设为当前时间）
 $user->setAttribute('deleted_at', (new DateTime())->format('Y-m-d H:i:s'));
 $user->save();
+
+######################################################################
 
 use Database\Models\User;
 
@@ -139,6 +144,10 @@ if ($user) {
 } else {
     echo "用户未找到";
 }
+
+
+######################################################################
+
 use Database\Models\User;
 
 // 查询 status 为 1 且 email 包含 'example.com' 的所有用户
@@ -151,6 +160,8 @@ foreach ($users as $user) {
     echo $user->getAttribute('username') . "\n";
 }
 
+######################################################################
+
 use Database\Models\User;
 
 // 查询 'last_login' 为 NULL 的用户
@@ -158,6 +169,9 @@ $users = User::query()->whereNull('last_login')->get();
 foreach ($users as $user) {
     echo $user->getAttribute('username') . "\n";
 }
+
+######################################################################
+
 use Database\Models\User;
 
 // 查询 'email' 不为空的用户
@@ -165,6 +179,9 @@ $users = User::query()->whereNotNull('email')->get();
 foreach ($users as $user) {
     echo $user->getAttribute('username') . "\n";
 }
+
+######################################################################
+
 use Database\Models\User;
 
 // 查询 username 为 'john_doe' 或 email 为 'jane.smith@example.com' 的用户
@@ -178,6 +195,9 @@ if ($user) {
 } else {
     echo "没有找到匹配的用户";
 }
+
+######################################################################
+
 use Database\Models\User;
 
 // 查询 username 为 'john_doe' 或 'jane_smith' 的用户
@@ -185,6 +205,9 @@ $users = User::query()->whereIn('username', ['john_doe', 'jane_smith'])->get();
 foreach ($users as $user) {
     echo $user->getAttribute('username') . "\n";
 }
+
+######################################################################
+
 use Database\Models\User;
 
 // 查询 'created_at' 在 2023-01-01 和 2023-12-31 之间的用户
@@ -195,6 +218,9 @@ $users = User::query()
 foreach ($users as $user) {
     echo $user->getAttribute('username') . "\n";
 }
+
+######################################################################
+
 use Database\Models\User;
 
 // 查询是否存在用户名为 'john_doe' 的用户
@@ -206,6 +232,7 @@ if ($exists) {
     echo "用户不存在";
 }
 
+######################################################################
 // 事务示例
 $conn = DB::beginTransaction();
 try {
