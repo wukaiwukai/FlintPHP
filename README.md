@@ -99,8 +99,112 @@ class User extends Model
 ```
 ### 数据库操作
 ```bash
-// 查询示例
-$users = User::query("SELECT * FROM users WHERE status = ?", [1]);
+use Database\Models\User;
+
+// 查询所有用户
+$users = User::query()->get();
+foreach ($users as $user) {
+    echo $user->getAttribute('username') . "\n";
+}
+
+use Database\Models\User;
+
+// 查询单个用户 by ID
+$user = User::find(1); // 查找 ID 为 1 的用户
+echo $user->getAttribute('username');
+
+// 查询单个用户
+$user = User::find(1);
+
+// 更新用户的 email 和 real_name
+$user->setAttribute('email', 'new.email@example.com');
+$user->setAttribute('real_name', 'John Updated');
+$user->save();
+
+use Database\Models\User;
+
+// 查询单个用户
+$user = User::find(1);
+
+// 执行软删除（将 `deleted_at` 设为当前时间）
+$user->setAttribute('deleted_at', (new DateTime())->format('Y-m-d H:i:s'));
+$user->save();
+
+use Database\Models\User;
+
+// 查询 username 为 'john_doe' 的用户
+$user = User::query()->where('username', 'john_doe')->first();
+if ($user) {
+    echo $user->getAttribute('real_name'); // 输出 'John Doe'
+} else {
+    echo "用户未找到";
+}
+use Database\Models\User;
+
+// 查询 status 为 1 且 email 包含 'example.com' 的所有用户
+$users = User::query()
+    ->where('status', 1)
+    ->where('email', 'LIKE', '%example.com%')
+    ->get();
+
+foreach ($users as $user) {
+    echo $user->getAttribute('username') . "\n";
+}
+
+use Database\Models\User;
+
+// 查询 'last_login' 为 NULL 的用户
+$users = User::query()->whereNull('last_login')->get();
+foreach ($users as $user) {
+    echo $user->getAttribute('username') . "\n";
+}
+use Database\Models\User;
+
+// 查询 'email' 不为空的用户
+$users = User::query()->whereNotNull('email')->get();
+foreach ($users as $user) {
+    echo $user->getAttribute('username') . "\n";
+}
+use Database\Models\User;
+
+// 查询 username 为 'john_doe' 或 email 为 'jane.smith@example.com' 的用户
+$user = User::query()
+    ->where('username', 'john_doe')
+    ->orWhere('email', 'jane.smith@example.com')
+    ->first();
+
+if ($user) {
+    echo $user->getAttribute('real_name');
+} else {
+    echo "没有找到匹配的用户";
+}
+use Database\Models\User;
+
+// 查询 username 为 'john_doe' 或 'jane_smith' 的用户
+$users = User::query()->whereIn('username', ['john_doe', 'jane_smith'])->get();
+foreach ($users as $user) {
+    echo $user->getAttribute('username') . "\n";
+}
+use Database\Models\User;
+
+// 查询 'created_at' 在 2023-01-01 和 2023-12-31 之间的用户
+$users = User::query()
+    ->whereBetween('created_at', ['2023-01-01', '2023-12-31'])
+    ->get();
+
+foreach ($users as $user) {
+    echo $user->getAttribute('username') . "\n";
+}
+use Database\Models\User;
+
+// 查询是否存在用户名为 'john_doe' 的用户
+$exists = User::query()->where('username', 'john_doe')->exists();
+
+if ($exists) {
+    echo "用户已存在";
+} else {
+    echo "用户不存在";
+}
 
 // 事务示例
 $conn = DB::beginTransaction();
